@@ -32,7 +32,7 @@ return {
 		function _G.set_terminal_keymaps()
 			local opts = { buffer = 0 }
 			-- ESC goes to normal mode in terminal
-			vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+			vim.keymap.set("t", "<esc>", [[<C-n><C-n>]], opts)
 			-- Make terminal navigation easier
 			vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
 			vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
