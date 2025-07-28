@@ -11,7 +11,21 @@ return {
 
         local protocol = require("vim.lsp.protocol")
 
+        -- Configure diagnostics
+        vim.diagnostic.config({
+            virtual_text = {
+                prefix = "●",
+            },
+            update_in_insert = false,
+            float = {
+                source = "always", -- Or "if_many"
+            },
+        })
+
         local on_attach = function(client, bufnr)
+            -- Enable completion triggered by <c-x><c-o>
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
             -- format on save
             if client.server_capabilities.documentFormattingProvider then
                 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -22,6 +36,9 @@ return {
                     end,
                 })
             end
+
+            -- Debug: Print when LSP attaches
+            print(string.format("LSP attached: %s to buffer %d", client.name, bufnr))
         end
 
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -29,6 +46,7 @@ return {
         mason_lspconfig.setup_handlers({
             function(server)
                 nvim_lsp[server].setup({
+                    on_attach = on_attach,
                     capabilities = capabilities,
                 })
             end,
@@ -72,6 +90,40 @@ return {
                 nvim_lsp["pyright"].setup({
                     on_attach = on_attach,
                     capabilities = capabilities,
+                })
+            end,
+            ["rust_analyzer"] = function()
+                nvim_lsp["rust_analyzer"].setup({
+                    on_attach = on_attach,
+                    capabilities = capabilities,
+                    settings = {
+                        ["rust-analyzer"] = {
+                            imports = {
+                                granularity = {
+                                    group = "module",
+                                },
+                                prefix = "self",
+                            },
+                            cargo = {
+                                buildScripts = {
+                                    enable = true,
+                                },
+                                allFeatures = true,
+                            },
+                            procMacro = {
+                                enable = true
+                            },
+                            rustfmt = {
+                                extraArgs = { "+nightly" },
+                            },
+                        }
+                    },
+                    -- Ensure cargo is found
+                    init_options = {
+                        cargo = {
+                            allFeatures = true,
+                        },
+                    },
                 })
             end,
         })

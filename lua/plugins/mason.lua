@@ -17,6 +17,7 @@ return {
 				-- "tsserver",
 				"pyright",
 				"tailwindcss",
+				"rust_analyzer",
 			},
 		})
 
@@ -29,6 +30,7 @@ return {
 				"pylint",
 				"eslint_d",
 				"debugpy",
+				"rustfmt", -- rust formatter
 			},
 		})
 	end,

@@ -44,6 +44,36 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show documentation" })
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show diagnostic" })
+vim.keymap.set("n", "<leader>D", vim.diagnostic.setloclist, { desc = "Diagnostic list" })
+
+-- LSP info (useful for debugging)
+vim.keymap.set("n", "<leader>li", "<CMD>LspInfo<CR>", { desc = "LSP Info" })
+
+-- LSP control commands
+vim.keymap.set("n", "<leader>lr", "<CMD>LspRestart<CR>", { desc = "LSP Restart" })
+vim.keymap.set("n", "<leader>ls", "<CMD>LspStart<CR>", { desc = "LSP Start" })
+vim.keymap.set("n", "<leader>lS", "<CMD>LspStop<CR>", { desc = "LSP Stop" })
+
+-- Force start rust-analyzer with proper PATH
+vim.keymap.set("n", "<leader>lR", function()
+    vim.lsp.start({
+        name = "rust_analyzer",
+        cmd = { "/home/tobias/.cargo/bin/rust-analyzer" },
+        root_dir = vim.fn.getcwd(),
+        settings = {
+            ["rust-analyzer"] = {
+                cargo = {
+                    allFeatures = true,
+                },
+            },
+        },
+    })
+end, { desc = "Force start rust-analyzer" })
 
 -- in terminal mode, use <C-n> to exit terminal mode
 vim.keymap.set("t", "<C-n><C-n>", "<C-\\><C-n>", { noremap = true, silent = true })
