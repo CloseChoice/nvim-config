@@ -21,6 +21,10 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+-- Line numbers
+vim.opt.number = true         -- Show line numbers
+vim.opt.relativenumber = true -- Show relative line numbers
+
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
