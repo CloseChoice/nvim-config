@@ -4,6 +4,8 @@ return {
     dependencies = {
         "hrsh7th/cmp-nvim-lsp",
         { "folke/neodev.nvim", opts = {} },
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
     },
     config = function()
         local nvim_lsp = require("lspconfig")
@@ -43,7 +45,21 @@ return {
 
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-        mason_lspconfig.setup_handlers({
+        -- Setup mason-lspconfig with handlers
+        mason_lspconfig.setup({
+            automatic_installation = true,
+            ensure_installed = {
+                "cssls",
+                "eslint",
+                "html",
+                "jsonls",
+                "pyright",
+                "tailwindcss",
+                "rust_analyzer",
+                "svelte",
+                "clangd",
+            },
+            handlers = {
             function(server)
                 nvim_lsp[server].setup({
                     on_attach = on_attach,
@@ -126,6 +142,42 @@ return {
                     },
                 })
             end,
+            ["svelte"] = function()
+                nvim_lsp["svelte"].setup({
+                    on_attach = on_attach,
+                    capabilities = capabilities,
+                    settings = {
+                        svelte = {
+                            plugin = {
+                                html = { completions = { enable = true, emmet = false } },
+                                svelte = { completions = { enable = true, emmet = false } },
+                                css = { completions = { enable = true, emmet = true } },
+                            },
+                        },
+                    },
+                })
+            end,
+            ["clangd"] = function()
+                nvim_lsp["clangd"].setup({
+                    on_attach = on_attach,
+                    capabilities = capabilities,
+                    cmd = {
+                        "clangd",
+                        "--background-index",
+                        "--clang-tidy",
+                        "--header-insertion=iwyu",
+                        "--completion-style=detailed",
+                        "--function-arg-placeholders",
+                        "--fallback-style=llvm",
+                    },
+                    init_options = {
+                        usePlaceholders = true,
+                        completeUnimported = true,
+                        clangdFileStatus = true,
+                    },
+                })
+            end,
+            },
         })
     end,
 }

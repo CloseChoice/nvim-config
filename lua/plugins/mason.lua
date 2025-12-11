@@ -7,20 +7,6 @@ return {
 	config = function()
 		require("mason").setup()
 
-		require("mason-lspconfig").setup({
-			automatic_installation = true,
-			ensure_installed = {
-				"cssls",
-				"eslint",
-				"html",
-				"jsonls",
-				-- "tsserver",
-				"pyright",
-				"tailwindcss",
-				"rust_analyzer",
-			},
-		})
-
 		require("mason-tool-installer").setup({
 			ensure_installed = {
 				"prettier",
@@ -31,6 +17,7 @@ return {
 				"eslint_d",
 				"debugpy",
 				"rustfmt", -- rust formatter
+				"codelldb", -- C/C++/Rust debugger
 			},
 		})
 	end,
