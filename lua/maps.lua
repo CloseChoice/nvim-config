@@ -33,12 +33,6 @@ map("n", "<C-Right>", "<C-w>>")
 map("n", "<C-Up>", "<C-w>+")
 map("n", "<C-Down>", "<C-w>-")
 
--- fzf
-map("n", "<leader>f", ":Files<CR>")
-map("n", "<leader>b", ":Buffers<CR>")
-map("n", "<leader>r", ":Rg<CR>")
-map("n", "<leader>h", ":History<CR>")
-
 -- lsp
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })

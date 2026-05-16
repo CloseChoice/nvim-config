@@ -16,7 +16,6 @@ return {
 				"pylint",
 				"eslint_d",
 				"debugpy",
-				"rustfmt", -- rust formatter
 				"codelldb", -- C/C++/Rust debugger
 			},
 		})

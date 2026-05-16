@@ -25,5 +25,8 @@ return {
 		vim.keymap.set("n", "gi", builtin.lsp_implementations, { desc = "Go to implementation" })
 		vim.keymap.set("n", "<leader>sd", builtin.lsp_document_symbols, { desc = "Document symbols" })
 		vim.keymap.set("n", "<leader>sw", builtin.lsp_dynamic_workspace_symbols, { desc = "Workspace symbols" })
+
+		vim.keymap.set("n", "<leader>b", builtin.buffers, { desc = "Buffers" })
+		vim.keymap.set("n", "<leader>h", builtin.oldfiles, { desc = "Recent files" })
 	end,
 }

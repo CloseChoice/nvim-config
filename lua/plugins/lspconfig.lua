@@ -28,13 +28,16 @@ return {
             -- Enable completion triggered by <c-x><c-o>
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-            -- format on save
-            if client.server_capabilities.documentFormattingProvider then
+            -- format on save (skip Python)
+            if client.server_capabilities.documentFormattingProvider
+                and vim.bo[bufnr].filetype ~= "python" then
                 vim.api.nvim_create_autocmd("BufWritePre", {
                     group = vim.api.nvim_create_augroup("Format", { clear = true }),
                     buffer = bufnr,
                     callback = function()
-                        vim.lsp.buf.format()
+                        vim.lsp.buf.format({
+                            filter = function(c) return c.name ~= "ruff" and c.name ~= "ruff_lsp" end,
+                        })
                     end,
                 })
             end
@@ -103,8 +106,18 @@ return {
                 })
             end,
             ["pyright"] = function()
+                -- Custom on_attach without format-on-save for Python
+                local function pyright_on_attach(client, bufnr)
+                    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+                    -- Disable formatting capability
+                    client.server_capabilities.documentFormattingProvider = false
+
+                    print(string.format("LSP attached: %s to buffer %d", client.name, bufnr))
+                end
+
                 nvim_lsp["pyright"].setup({
-                    on_attach = on_attach,
+                    on_attach = pyright_on_attach,
                     capabilities = capabilities,
                 })
             end,
